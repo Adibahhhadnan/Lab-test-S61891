@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Employee Details</title>
+  <script>
+    function getEmployeeDetails() {
+      
+      var queryString = window.location.search;
+      var urlParams = new URLSearchParams(queryString);
+      var employeeNumber = urlParams.get('employeeNumber');
+
+     
+      var xmlhttp = new XMLHttpRequest();
+      var url = 'https://kerbau.odaje.biz/getstaffbyid.php?id=employeeNumber' + employeeNumber;
+
+      xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+         
+          var employeeData = JSON.parse(xmlhttp.responseText);
+          displayEmployeeDetails(employeeData);
+        }
+      };
+
+      xmlhttp.open('GET', url, true);
+      xmlhttp.send();
+    }
+
+    function displayEmployeeDetails(employeeData) {
+      
+      var employeeDetails = document.getElementById('employeeDetails');
+
+      var employeeNumber = employeeData.employeeNumber;
+      var email = employeeData.email;
+      var firstName = employeeData.firstName;
+      var lastName = employeeData.lastName;
+      var officeCode = employeeData.officeCode;
+      var phoneExtension = employeeData.phoneExtension;
+      var jobTitle = employeeData.jobTitle;
+      var reportsTo = employeeData.reportsTo;
+
+      var detailsText = 'Employee Number : ' + employeeNumber + '<br>' +
+                        'Email : ' + email + '<br>' +
+                        'First Name : ' + firstName + '<br>' +
+                        'Last Name: '  + lastName + '<br>' +
+                        'Office Code : ' + officeCode + '<br>' +
+                        'Phone Extension : ' + phoneExtension + '<br>' +
+                        'Job Title : ' + jobTitle + '<br>' +
+                        'Reports to : ' + reportsTo;
+
+      employeeDetails.innerHTML = detailsText;
+    }
+  </script>
+</head>
+<body onload="getEmployeeDetails()">
+  <h1>Employee Details</h1>
+  <div id="employeeDetails"></div>
+</body>
+</html>

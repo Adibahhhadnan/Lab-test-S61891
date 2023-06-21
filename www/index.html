@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Employee List</title>
+  <script>
+    function getStaffData() {
+      
+      var xmlhttp = new XMLHttpRequest();
+      var url = 'https://kerbau.odaje.biz/getstaff.php';
+
+      xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+         
+          var staffData = JSON.parse(xmlhttp.responseText);
+          displayStaffData(staffData);
+        }
+      };
+
+      xmlhttp.open('GET', url, true);
+      xmlhttp.send();
+    }
+
+    function displayStaffData(staffData) {
+      
+      var table = document.getElementById('staffTable');
+
+      for (var i = 0; i < staffData.length; i++) {
+        var row = table.insertRow();
+
+        var employeeNumber = staffData[i].employeeNumber;
+        var email = staffData[i].email;
+
+        row.insertCell().innerText = employeeNumber;
+        var emailCell = row.insertCell();
+        emailCell.innerText = email;
+        emailCell.setAttribute('id', employeeNumber);
+        emailCell.setAttribute('onclick', 'redirectToSecondPage(this.id)');
+      }
+    }
+
+    function redirectToSecondPage(employeeNumber) {
+      
+      var redirectUrl = 'secondpage.html?employeeNumber=' + employeeNumber;
+      window.location.href = redirectUrl;
+    }
+  </script>
+</head>
+<body onload="getStaffData()">
+  <h1>Employee List</h1>
+  <table id="staffTable">
+    <tr>
+      <th>Employee Number</th>
+      <th>Email</th>
+    </tr>
+  </table>
+</body>
+</html>
